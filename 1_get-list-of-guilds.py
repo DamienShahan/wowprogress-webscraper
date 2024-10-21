@@ -52,7 +52,7 @@ while keep_scraping:
             guild_realm = realm_tag.text.strip()
 
             # Check if the realm does not start with "US-" or "EU (RU)-"
-            if not guild_realm.startswith('US') and not guild_realm.startswith('EU (RU)-') and not guild_realm.startswith('EU (FR)-') and not guild_realm.startswith('OC-'):
+            if not guild_realm.startswith('US') and not guild_realm.startswith('EU (RU)') and not guild_realm.startswith('EU (FR)') and not guild_realm.startswith('OC'):
                 # Extract guild link (href attribute)
                 guild_link = f"https://www.wowprogress.com{guild_tag['href']}"
 
