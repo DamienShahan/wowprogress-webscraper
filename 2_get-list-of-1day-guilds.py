@@ -9,6 +9,7 @@ scraper = cloudscraper.create_scraper()
 # Read the existing CSV file
 input_csv = 'wowprogress_guilds_with_ranks_filtered_to_2000.csv'
 df = pd.read_csv(input_csv)
+total_rows = len(df)
 
 # Initialize an empty list to store the raids_week values
 raids_week_values = []
@@ -17,7 +18,7 @@ raids_week_values = []
 for index, row in df.iterrows():
     guild_link = row['Link']
     
-    print(f"Fetching data for {row['Guild Name']}...")
+    print(f"{index}/{total_rows}: Fetching data for {row['Guild Name']}...")
 
     # Fetch the guild's page using the link
     guild_page_raw = scraper.get(guild_link)
