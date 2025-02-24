@@ -11,6 +11,8 @@ This script goes page for page and downloads a list of all guilds that raid 1-2 
 
 ### 2_get-list-of-1day-guilds.py
 This script takes the output from script 1 and looks up the number of raid days per week that each guild in the list has. The number of raids per week is then added to the list and output as a seperate .CSV file.
+This step also filters out guilds that are not in the language that we are searching for.
+Finally, the guild description is analysed using chatgpt and the specific raid days are set in the CSV output.
 
 ### 3_filter-for-1day.py
 Finally, script 3 removes all rows where the number of raids per week does not match the value we are looking for.
