@@ -75,7 +75,7 @@ def get_raid_days(guild_description):
 for index, row in df.iterrows():
     guild_link = row['Link']
     
-    print(f"{index+1}/{total_rows}: Fetching data for {row['Guild Name']}...")
+    print(f"{index+1}/{total_rows}: Fetching data for {row['Guild Name']}")
 
     # Fetch the guild's page
     guild_page_raw = scraper.get(guild_link)
