@@ -14,5 +14,11 @@ This script takes the output from script 1 and looks up the number of raid days 
 This step also filters out guilds that are not in the language that we are searching for.
 Finally, the guild description is analysed using chatgpt and the specific raid days are set in the CSV output.
 
+There are two options for this script, one using OpenAI and one using Gemini.
+- 2_gemini_get-list-of-1day-guilds.py
+- 2_openai_get-list-of-1day-guilds.py
+
+| Notice: Gemini is current extremly slow
+
 ### 3_filter-for-1day.py
 Finally, script 3 removes all rows where the number of raids per week does not match the value we are looking for.
