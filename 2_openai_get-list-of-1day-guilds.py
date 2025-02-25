@@ -34,14 +34,18 @@ def get_raid_days(guild_description):
         return json.dumps([])  # Return empty list if no description
     
     prompt = f"""
-    Extract only the raid days from the following guild description.
+    Extract only the raid days, or the fact that the guild no longer raids, from the following guild description.
     
     Return the response as a valid JSON list with only the raid days, like this:
     ["Monday", "Tuesday", "Wednesday"]
+
+    If the guild no longer actively raids, return a list containing a single string with the value "Dead", like this:
+    ["Dead"]
     
-    Make sure the weekdays in the output list are in english.
-    
-    Do not include any additional text, explanations, or formatting.
+    Ensure that:
+    - The output is a strict JSON list.
+    - The weekdays are in English.
+    - Do not include any additional text, explanations, or formatting.
     
     Guild Description:
     {guild_description}
@@ -112,25 +116,22 @@ df['Raids Week'] = raids_week_values
 df['Language'] = language_values
 df['Raid Days JSON'] = raid_days_json_values
 
-df['Raid Days JSON'][0]
-
 # Filter DataFrame based on the user-defined FILTER_LANGUAGES
-df_filtered = df[df['Language'].isin(FILTER_LANGUAGES)]
+df_filtered = df[df['Language'].isin(FILTER_LANGUAGES)].copy()
 
 # Parse Raid Days JSON and create individual columns for each day of the week
-days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Dead"]
 
 # Initialize new columns with False
-for day in days_of_week:
-    df_filtered.loc[:, day] = False
+df_filtered = df_filtered.assign(**{day: False for day in days_of_week})
 
 # Fill in the raid days based on the list response
 for index, row in df_filtered.iterrows():
     try:
-        raid_days_list = json.loads(row["Raid Days JSON"])  # Now directly a list, no "raiddays" key
+        raid_days_list = json.loads(row["Raid Days JSON"])
         for day in raid_days_list:
             if day in days_of_week:
-                df_filtered.loc[index, day] = True  # Mark as True
+                df_filtered.loc[index, day] = True
     except json.JSONDecodeError:
         print(f"Error decoding JSON for row {index}")
 
@@ -142,7 +143,7 @@ columns_order = ['Rank', 'Guild Name', 'Realm', 'Raids Week', 'Language'] + days
 df_filtered = df_filtered[columns_order]
 
 # Save the filtered DataFrame to a new CSV file
-output_csv = 'wowprogress_guilds_filtered_with_raiddays.csv'
+output_csv = 'wowprogress_guilds_filtered_with_raiddays_openai.csv'
 df_filtered.to_csv(output_csv, index=False, encoding='utf-8')
 
 print(f"Filtered CSV file '{output_csv}' created successfully! Included languages: {FILTER_LANGUAGES}")
