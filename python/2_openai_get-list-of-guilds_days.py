@@ -14,7 +14,7 @@ from openai import OpenAI
 # ============================================================
 
 INPUT_CSV = "wowprogress_guilds_to_analyze.csv"
-OUTPUT_CSV = "wowprogress_guilds_filtered_with_schedule_openai.csv"
+OUTPUT_CSV = "output/wowprogress_guilds_filtered_with_schedule_openai.csv"
 FILTER_LANGUAGES = ["German", "English"]
 REQUEST_DELAY_SECONDS = 0.5
 OPENAI_MODEL = "gpt-5-nano"

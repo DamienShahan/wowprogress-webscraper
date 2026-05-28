@@ -1,2 +1,4 @@
 secrets.yaml
 .venv/
+output/
+downloads/
