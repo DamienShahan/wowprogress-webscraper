@@ -1,51 +1,60 @@
-# Wowprogress Webscrapper
+# WoWProgress Guild Table Export
 
-This is a small script used to scrape the number of raid days from wowprogress to filter the choices to ones that fit the amount of days being looked for.
+Small browser-console script to export guild data from a WoWProgress ranking table into CSV format.
 
-## Execution
+The script reads the table and copies the extracted data directly to the clipboard.
 
-Execute the three scripts after each other, in the order 1* then 2* then 3\_.
+The most current version is in the `/javascript/` folder
 
-## Installation
+## Usage
 
-### 1. Set up Virtual Environment
+1. Open the desired WoWProgress ranking page in your browser.
+2. Open Developer Tools.
+3. Go to the **Console** tab.
+4. Paste the script.
+5. Press **Enter**.
+6. The CSV will be copied to your clipboard or a JSON file will be downloaded
+7. Paste it into a `.csv` file.
 
-```bash
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
+## Notes
 
-If opening the virtual environment is being blocked, you can allow it with this command:
-
-```bash
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-### 2. Install Python Packages
-
-```bash
-pip install -r requirements.txt
-```
+This script only extracts data from a page that is already loaded in your browser. It does not make automated requests to WoWProgress.
 
 ## Settings
 
-### 1_get-list-of-guilds.py
+### 1_wowprogress_get-list-of-guilds.js
 
-This script goes page for page and downloads a list of all guilds that raid 1-2 days per week, till the world rank 2000. Then all entries starting with `US`, `OC`, `EU (FR)` or `EU (RU)` are filtered out. The final list is saved to a .CSV file.
+This script extracts the list of guilds, page for page, as CSV data to your clipboard.
 
-### 2_get-list-of-1day-guilds.py
+Entries starting with the following area codes are ignored:
 
-This script takes the output from script 1 and looks up the number of raid days per week that each guild in the list has. The number of raids per week is then added to the list and output as a seperate .CSV file.
-This step also filters out guilds that are not in the language that we are searching for.
-Finally, the guild description is analysed using chatgpt and the specific raid days are set in the CSV output.
+- "US"
+- "EU (RU)"
+- "EU (FR)"
+- "EU (ES)"
+- "OC"
+- "KR"
+- "TW"
 
-There are two options for this script, one using OpenAI and one using Gemini.
+The final list has to be saved to a .CSV file. E.g. `/downloads/overview/list.csv`
 
-- 2_gemini_get-list-of-1day-guilds.py
-- 2_openai_get-list-of-1day-guilds.py
+### 2_wowprogress_content-scrapper.js
 
-| Notice: Gemini is current extremly slow
+This browser-console script extracts profile data from a single WoWProgress guild page and downloads it as a JSON file named after the guild.
 
-### 3_filter-for-1day.py
+It reads the guild name from the page title, then extracts the guild language, raids per week, description, and current recruitment priorities from the guild profile section.
 
-Finally, script 3 removes all rows where the number of raids per week does not match the value we are looking for.
+The downloaded JSON includes:
+
+- `url`
+- `guild_name`
+- `language`
+- `raids_per_week`
+- `description`
+- `recruitment`
+
+The `recruitment` field is stored as an array of class/role/priority objects, making it easier to process or import later.
+
+### 3_ai_analysis.py
+
+Finally, the guild description data is analysed using chatgpt and the final CSV output is generated, to be then inserted into a google spreadsheet.
